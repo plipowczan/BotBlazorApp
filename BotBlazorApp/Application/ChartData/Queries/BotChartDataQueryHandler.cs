@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace BotWebApi.Application.ChartData.Queries;
+namespace BotBlazorApp.Application.ChartData.Queries;
 
 internal class
     BotChartDataQueryHandler : IRequestHandler<BotChartDataQuery, List<BotChartDataResponse>>

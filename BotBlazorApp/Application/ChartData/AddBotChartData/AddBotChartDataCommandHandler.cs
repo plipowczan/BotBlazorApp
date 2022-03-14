@@ -1,7 +1,7 @@
-﻿using BotWebApi.Application.Services;
+﻿using BotBlazorApp.Services;
 using MediatR;
 
-namespace BotWebApi.Application.ChartData.AddBotChartData;
+namespace BotBlazorApp.Application.ChartData.AddBotChartData;
 
 internal class AddBotChartDataCommandHandler : IRequestHandler<AddBotChartDataCommand>
 {

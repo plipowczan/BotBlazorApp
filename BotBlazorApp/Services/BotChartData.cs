@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BotWebApi.Application.Services;
+namespace BotBlazorApp.Services;
 
 public class BotChartData
 {

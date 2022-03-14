@@ -2,8 +2,6 @@
 @using BotBlazorApp.Data
 @using Syncfusion.Blazor.Charts
 
-@inject BotChartDataService botChartDataService
-
 <PageTitle>Index</PageTitle>
 
 @if (_stockChartDatas == null)
@@ -29,6 +27,5 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _stockChartDatas = await botChartDataService.GetBotChartDataAsync();
     }
 }

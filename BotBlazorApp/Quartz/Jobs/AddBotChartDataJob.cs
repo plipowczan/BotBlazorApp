@@ -1,12 +1,12 @@
 ﻿#region usings
 
-using BotWebApi.Application.ChartData.AddBotChartData;
+using BotBlazorApp.Application.ChartData.AddBotChartData;
 using MediatR;
 using Quartz;
 
 #endregion
 
-namespace BotWebApi.Quartz.Jobs;
+namespace BotBlazorApp.Quartz.Jobs;
 
 [DisallowConcurrentExecution]
 public class AddBotChartDataJob : IJob

@@ -1,4 +1,4 @@
-﻿namespace BotWebApi.Application.ChartData.Queries;
+﻿namespace BotBlazorApp.Application.ChartData.Queries;
 public class BotChartDataResponse
 {
     public DateTime Time { get; set; }

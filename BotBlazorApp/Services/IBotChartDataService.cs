@@ -1,4 +1,4 @@
-﻿namespace BotWebApi.Application.Services;
+﻿namespace BotBlazorApp.Services;
 
 public interface IBotChartDataService
 {

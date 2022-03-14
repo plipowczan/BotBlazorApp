@@ -1,22 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BotBlazorApp.Data;
 
 public class BotChartData
 {
-    [JsonProperty("time")] public DateTime Time { get; set; }
+    [Key] public int Id { get; set; }
 
-    [JsonProperty("ema")] public double Ema { get; set; }
+    public DateTime Date { get; set; }
 
-    [JsonProperty("vwap")] public double Vwap { get; set; }
+     public decimal EMA { get; set; }
 
-    [JsonProperty("lastPrice")] public decimal LastPrice { get; set; }
+     public decimal VWAP { get; set; }
 
-    [JsonProperty("supertrend")] public double Supertrend { get; set; }
+     public decimal LastPrice { get; set; }
 
-    [JsonProperty("entryPrice")] public decimal EntryPrice { get; set; }
+     public decimal SuperTrend { get; set; }
 
-    [JsonProperty("highPrice")] public decimal HighPrice { get; set; }
+     public decimal EntryPrice { get; set; }
 
-    [JsonProperty("exitPrice")] public decimal ExitPrice { get; set; }
+     public decimal HighPrice { get; set; }
+
+     public decimal ExitPrice { get; set; }
 }
