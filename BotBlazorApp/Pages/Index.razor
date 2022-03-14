@@ -1,0 +1,34 @@
+﻿@page "/"
+@using BotBlazorApp.Data
+@using Syncfusion.Blazor.Charts
+
+@inject BotChartDataService botChartDataService
+
+<PageTitle>Index</PageTitle>
+
+@if (_stockChartDatas == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <SfStockChart Title="Bot Data">
+        <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
+        <StockChartTooltipSettings Enable="true" Shared="true" Format="${point.x} : ${point.y}" Header="X"></StockChartTooltipSettings>
+        <StockChartSeriesCollection>
+            <StockChartSeries DataSource="@_stockChartDatas" Type="ChartSeriesType.Candle" XName="Time" YName="LastPrice" High="HighPrice" Low="LastPrice" Open="EntryPrice" Close="ExitPrice"></StockChartSeries>
+        </StockChartSeriesCollection>
+    </SfStockChart>
+}
+
+@code
+{
+    List<BotChartData>? _stockChartDatas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _stockChartDatas = await botChartDataService.GetBotChartDataAsync();
+    }
+}
