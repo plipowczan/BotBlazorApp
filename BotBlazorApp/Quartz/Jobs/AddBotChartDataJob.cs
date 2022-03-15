@@ -1,7 +1,7 @@
 ﻿#region usings
 
 using BotBlazorApp.Application.ChartData.AddBotChartData;
-using MediatR;
+using BotBlazorApp.Common.Commands;
 using Quartz;
 
 #endregion
@@ -11,17 +11,16 @@ namespace BotBlazorApp.Quartz.Jobs;
 [DisallowConcurrentExecution]
 public class AddBotChartDataJob : IJob
 {
+    private readonly ICommandDispatcher _commandDispatcher;
     private readonly ILogger<AddBotChartDataJob> _logger;
-
-    private readonly IMediator _mediator;
 
     #region Constructors
 
-    public AddBotChartDataJob(IMediator mediator,
-        ILogger<AddBotChartDataJob> logger)
+    public AddBotChartDataJob(ILogger<AddBotChartDataJob> logger, ICommandDispatcher commandDispatcher)
     {
-        _mediator = mediator;
+        //  _mediator = mediator;
         _logger = logger;
+        _commandDispatcher = commandDispatcher;
     }
 
     #endregion
@@ -31,7 +30,7 @@ public class AddBotChartDataJob : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogWarning("AddBotChartDataJob triggered");
-        await _mediator.Send(new AddBotChartDataCommand());
+        await _commandDispatcher.ExecuteAsync(new AddBotChartDataCommand());
     }
 
     #endregion

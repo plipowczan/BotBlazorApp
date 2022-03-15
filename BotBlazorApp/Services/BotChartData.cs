@@ -4,15 +4,15 @@ namespace BotBlazorApp.Services;
 
 public class BotChartData
 {
-    [JsonProperty("time")] public DateTime Time { get; set; }
+    [JsonProperty("time")] public DateTime Date { get; set; }
 
-    [JsonProperty("ema")] public double Ema { get; set; }
+    [JsonProperty("ema")] public decimal EMA { get; set; }
 
-    [JsonProperty("vwap")] public double Vwap { get; set; }
+    [JsonProperty("vwap")] public decimal VWAP { get; set; }
 
     [JsonProperty("lastPrice")] public decimal LastPrice { get; set; }
 
-    [JsonProperty("supertrend")] public double Supertrend { get; set; }
+    [JsonProperty("supertrend")] public double SuperTrend { get; set; }
 
     [JsonProperty("entryPrice")] public decimal EntryPrice { get; set; }
 

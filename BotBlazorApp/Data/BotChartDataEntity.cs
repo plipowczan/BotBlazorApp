@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BotBlazorApp.Data;
 
-public class BotChartData
+[Table("BotChartData")]
+public class BotChartDataEntity
 {
     [Key] public int Id { get; set; }
 

@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace BotBlazorApp.Data
+namespace BotBlazorApp.Data;
+
+public class SqlDbContext : DbContext
 {
-    public class SqlDbContext : DbContext
+    public SqlDbContext(DbContextOptions<SqlDbContext> options)
+        : base(options)
     {
-        public SqlDbContext(DbContextOptions<SqlDbContext> options)
-            : base(options)
-        {
-        }
-        public DbSet<BotChartData> BotChartDatas { get; set; }
+
     }
+
+    public DbSet<BotChartDataEntity>? BotChartDatas { get; set; }
 }

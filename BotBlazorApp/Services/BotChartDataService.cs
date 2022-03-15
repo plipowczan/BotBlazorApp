@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace BotBlazorApp.Services;
 
-public class BotChartDataService
+public class BotChartDataService : IBotChartDataService
 {
     private readonly string _botChartDataUrl;
 
