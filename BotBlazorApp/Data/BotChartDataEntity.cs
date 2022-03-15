@@ -18,9 +18,9 @@ public class BotChartDataEntity
 
      public decimal SuperTrend { get; set; }
 
-     public decimal EntryPrice { get; set; }
+     public decimal? EntryPrice { get; set; }
 
-     public decimal HighPrice { get; set; }
+     public decimal? HighPrice { get; set; }
 
-     public decimal ExitPrice { get; set; }
+     public decimal? ExitPrice { get; set; }
 }

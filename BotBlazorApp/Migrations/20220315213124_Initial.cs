@@ -10,7 +10,7 @@ namespace BotBlazorApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BotChartDatas",
+                name: "BotChartData",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,20 +20,20 @@ namespace BotBlazorApp.Migrations
                     VWAP = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     LastPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SuperTrend = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    EntryPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    HighPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ExitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    EntryPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    HighPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ExitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BotChartDatas", x => x.Id);
+                    table.PrimaryKey("PK_BotChartData", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BotChartDatas");
+                name: "BotChartData");
         }
     }
 }

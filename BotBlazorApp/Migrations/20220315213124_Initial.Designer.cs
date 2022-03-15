@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BotBlazorApp.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    [Migration("20220314202035_Initial")]
+    [Migration("20220315213124_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace BotBlazorApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BotBlazorApp.Data.BotChartData", b =>
+            modelBuilder.Entity("BotBlazorApp.Data.BotChartDataEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,13 +38,13 @@ namespace BotBlazorApp.Migrations
                     b.Property<decimal>("EMA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("EntryPrice")
+                    b.Property<decimal?>("EntryPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("ExitPrice")
+                    b.Property<decimal?>("ExitPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("HighPrice")
+                    b.Property<decimal?>("HighPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("LastPrice")
@@ -58,7 +58,7 @@ namespace BotBlazorApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BotChartDatas");
+                    b.ToTable("BotChartData");
                 });
 #pragma warning restore 612, 618
         }

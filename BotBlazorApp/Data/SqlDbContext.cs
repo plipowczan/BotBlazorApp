@@ -10,5 +10,5 @@ public class SqlDbContext : DbContext
 
     }
 
-    public DbSet<BotChartDataEntity>? BotChartDatas { get; set; }
+    public DbSet<BotChartDataEntity>? BotChartData { get; set; }
 }

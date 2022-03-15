@@ -14,9 +14,9 @@ public class BotChartData
 
     [JsonProperty("supertrend")] public double SuperTrend { get; set; }
 
-    [JsonProperty("entryPrice")] public decimal EntryPrice { get; set; }
+    [JsonProperty("entryPrice")] public decimal? EntryPrice { get; set; }
 
-    [JsonProperty("highPrice")] public decimal HighPrice { get; set; }
+    [JsonProperty("highPrice")] public decimal? HighPrice { get; set; }
 
-    [JsonProperty("exitPrice")] public decimal ExitPrice { get; set; }
+    [JsonProperty("exitPrice")] public decimal? ExitPrice { get; set; }
 }
