@@ -12,6 +12,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
+        "VaultUri": "https://botblazorappvault.vault.azure.net/",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:7013;http://localhost:5013",

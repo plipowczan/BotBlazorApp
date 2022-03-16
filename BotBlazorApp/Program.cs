@@ -9,6 +9,7 @@ using Quartz.Impl;
 using Quartz.Spi;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,12 @@ builder.Services.AddHostedService<QuartzHostedService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+    builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+}
 
 using (var scope = app.Services.CreateScope())
 {

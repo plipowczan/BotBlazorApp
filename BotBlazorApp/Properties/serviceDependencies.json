@@ -5,7 +5,8 @@
       "connectionId": "ConnectionStrings:SqlDbContext"
     },
     "secrets1": {
-      "type": "secrets"
+      "type": "secrets",
+      "connectionId": "VaultUri"
     }
   }
 }
