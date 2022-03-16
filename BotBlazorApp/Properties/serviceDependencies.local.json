@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "secrets1": {
-      "type": "secrets.user"
-    },
     "mssql1": {
       "secretStore": "LocalSecretsFile",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/botdatadbdbserver/databases/BotDataDB",
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:SqlDbContext"
+    },
+    "secrets1": {
+      "type": "secrets.user"
     }
   }
 }

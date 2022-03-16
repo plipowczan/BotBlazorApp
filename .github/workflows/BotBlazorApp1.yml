@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core app to Linux WebApp BotBlazorApp
+name: Build and deploy .NET Core app to Windows WebApp BotBlazorApp
 on:
   push:
     branches:
@@ -6,13 +6,13 @@ on:
 env:
   AZURE_WEBAPP_NAME: BotBlazorApp
   AZURE_WEBAPP_PACKAGE_PATH: BotBlazorApp/publish
-  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.BotBlazorApp_3606 }}
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.BotBlazorApp_7d8d }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: BotBlazorApp
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -22,7 +22,7 @@ jobs:
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore --self-contained true -r linux-x64
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
