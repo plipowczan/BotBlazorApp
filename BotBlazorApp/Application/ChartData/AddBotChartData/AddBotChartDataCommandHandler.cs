@@ -2,7 +2,6 @@
 using BotBlazorApp.Common.Commands;
 using BotBlazorApp.Data;
 using BotBlazorApp.Services;
-using MediatR;
 
 namespace BotBlazorApp.Application.ChartData.AddBotChartData;
 

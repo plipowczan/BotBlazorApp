@@ -9,15 +9,20 @@ using Quartz.Impl;
 using Quartz.Spi;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor(options => options.DetailedErrors = true);
 builder.Services.AddSyncfusionBlazor(options => options.IgnoreScriptIsolation = true);
+string connectionString = builder.Configuration.GetConnectionString("SqlDbContext");
 builder.Services.AddDbContext<SqlDbContext>(
-    options => { options.UseSqlServer(builder.Configuration.GetConnectionString("SqlDbContext")); });
+    options => { options.UseSqlServer(connectionString); });
 
 builder.Services.AddSingleton<IBotChartDataService, BotChartDataService>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -38,7 +43,7 @@ builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
 builder.Services.AddSingleton<AddBotChartDataJob>();
 builder.Services.AddSingleton(new JobMetadata(Guid.NewGuid(), typeof(AddBotChartDataJob),
-    nameof(AddBotChartDataJob), "0/10 * * ? * * *"));
+    nameof(AddBotChartDataJob), "0/30 * * ? * * *"));
 
 builder.Services.AddControllers();
 builder.Services.AddHostedService<QuartzHostedService>();
