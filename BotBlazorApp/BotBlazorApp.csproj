@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>87055c11-5484-4c63-aa5f-6fac0e455717</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/b3a1059f-2ac8-436f-88c0-087d4145a1cd/resourceGroups/BotAppRG/providers/microsoft.insights/components/BotBlazorAppInsights</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.0" />
     <PackageReference Include="Azure.Identity" Version="1.4.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -21,7 +23,7 @@
     <PackageReference Include="Quartz" Version="3.3.3" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
     <PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
-    <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.55" />
+    <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
   </ItemGroup>
 
 </Project>

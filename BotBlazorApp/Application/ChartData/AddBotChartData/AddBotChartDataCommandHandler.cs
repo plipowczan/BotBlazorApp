@@ -23,10 +23,12 @@ internal class AddBotChartDataCommandHandler : ICommandHandler<AddBotChartDataCo
         try
         {
             var botChartData = await _botChartDataService.GetBotChartDataAsync();
-
-            var botChartDataEntity = _mapper.Map<BotChartDataEntity>(botChartData);
-            _unitOfWork.BotChartDataRepository.Insert(botChartDataEntity);
-            await _unitOfWork.SaveAsync();
+            if (botChartData != null)
+            {
+                var botChartDataEntity = _mapper.Map<BotChartDataEntity>(botChartData);
+                _unitOfWork.BotChartDataRepository.Insert(botChartDataEntity);
+                await _unitOfWork.SaveAsync();
+            }
         }
         catch (Exception e)
         {

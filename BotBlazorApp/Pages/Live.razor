@@ -1,0 +1,63 @@
+﻿@page "/live"
+@using System.Timers
+@using Syncfusion.Blazor.Charts
+@using BotBlazorApp.Services
+@using System.Collections.ObjectModel
+@inject IBotChartDataService _bodDataService;
+@inject ILogger<Live> _logger;
+
+<PageTitle>Live</PageTitle>
+
+<SfStockChart Title="Bot Data" @ref="_stockChart">
+    <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
+    <StockChartTooltipSettings Enable="true" Shared="true" Format="${point.x} : ${point.y}" Header="X"></StockChartTooltipSettings>
+    <StockChartSeriesCollection>
+        <StockChartSeries DataSource="@_stockChartData" Type="ChartSeriesType.Line" XName="Date" YName="LastPrice" High="HighPrice" Low="LastPrice" Open="EntryPrice" Close="ExitPrice"></StockChartSeries>
+    </StockChartSeriesCollection>
+</SfStockChart>
+
+<button class="btn btn-primary" @onclick="Refresh">Click me</button>
+
+<p>Current count: @_currentCount</p>
+
+@code {
+    private ObservableCollection<BotChartData>? _stockChartData = new();
+
+    private async Task GetAndUpdateChartData()
+    {
+        try
+        {
+            var result = await _bodDataService.GetBotChartDataAsync();
+            _stockChartData.Add(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting chart data");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var timer = new System.Threading.Timer((_) =>
+        {
+            InvokeAsync( async ()  =>
+            {
+                _currentCount++;
+                await GetAndUpdateChartData();
+                this._stockChart?.Refresh();
+                StateHasChanged();
+            });
+        }, null, 0, 1000);
+    }
+
+    private void Refresh()
+    {
+        this._stockChart?.Refresh();
+        StateHasChanged();
+    }
+
+    private int _currentCount;
+    private SfStockChart _stockChart;
+}

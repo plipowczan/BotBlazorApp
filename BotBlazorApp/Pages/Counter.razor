@@ -1,0 +1,49 @@
+﻿@page "/counter"
+@using System.Timers
+@implements IDisposable
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p>Current count: @_currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int _currentCount;
+
+    private void IncrementCount()
+    {
+        _currentCount++;
+        Console.WriteLine($"Count incremented: {_currentCount}");
+    }
+
+    private Timer? _timer;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _timer = new Timer();
+            _timer.Interval = 1000;
+            _timer.Elapsed += OnTimerInterval!;
+            _timer.AutoReset = true;
+    // Start the timer
+            _timer.Enabled = true;
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    private void OnTimerInterval(object sender, ElapsedEventArgs e)
+    {
+        IncrementCount();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+
+}

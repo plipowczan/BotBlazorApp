@@ -45,6 +45,7 @@ builder.Services.AddSingleton(new JobMetadata(Guid.NewGuid(), typeof(AddBotChart
 builder.Services.AddControllers();
 builder.Services.AddHostedService<QuartzHostedService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
 
