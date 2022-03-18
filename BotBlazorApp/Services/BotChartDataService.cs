@@ -11,7 +11,7 @@ public class BotChartDataService : IBotChartDataService
         _botChartDataUrl = configuration["BotChartData:Url"];
     }
 
-    public async Task<BotChartData?> GetBotChartDataAsync()
+    public async Task<BotChartData> GetBotChartDataAsync()
     {
         using var client = new HttpClient();
         using var httpResponseMessage = await client.GetAsync(_botChartDataUrl);

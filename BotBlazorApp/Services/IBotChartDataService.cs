@@ -2,5 +2,5 @@
 
 public interface IBotChartDataService
 {
-    Task<BotChartData?> GetBotChartDataAsync();
+    Task<BotChartData> GetBotChartDataAsync();
 }

@@ -1,10 +1,11 @@
 ﻿@page "/live"
-@using System.Timers
-@using Syncfusion.Blazor.Charts
-@using BotBlazorApp.Services
-@using System.Collections.ObjectModel
 @inject IBotChartDataService _bodDataService;
 @inject ILogger<Live> _logger;
+@using BotBlazorApp.Services
+@using System.Collections.ObjectModel
+@using System.Timers
+@using Syncfusion.Blazor.Charts
+@implements IDisposable;
 
 <PageTitle>Live</PageTitle>
 
@@ -16,19 +17,18 @@
     </StockChartSeriesCollection>
 </SfStockChart>
 
-<button class="btn btn-primary" @onclick="Refresh">Click me</button>
-
-<p>Current count: @_currentCount</p>
+<p>Date refresh: @_dateTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
 
 @code {
-    private ObservableCollection<BotChartData>? _stockChartData = new();
+    private readonly ObservableCollection<BotChartData?>? _stockChartData = new();
 
     private async Task GetAndUpdateChartData()
     {
         try
         {
             var result = await _bodDataService.GetBotChartDataAsync();
-            _stockChartData.Add(result);
+            _stockChartData?.Add(result);
+            _stockChart?.Refresh();
         }
         catch (Exception e)
         {
@@ -36,28 +36,34 @@
         }
     }
 
+    private Timer _timer = null!;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
-        var timer = new System.Threading.Timer((_) =>
+    // create the timer
+        _timer = new Timer(1000);
+        _timer.Start();
+
+        _timer.Elapsed += (_, _) =>
         {
-            InvokeAsync( async ()  =>
+            InvokeAsync(async () =>
             {
-                _currentCount++;
+                _dateTime = DateTime.Now;
                 await GetAndUpdateChartData();
-                this._stockChart?.Refresh();
                 StateHasChanged();
             });
-        }, null, 0, 1000);
+        };
     }
 
-    private void Refresh()
+    DateTime _dateTime = DateTime.Now;
+    private SfStockChart? _stockChart;
+
+    public void Dispose()
     {
-        this._stockChart?.Refresh();
-        StateHasChanged();
+        _timer.Stop();
+        _timer.Dispose();
     }
 
-    private int _currentCount;
-    private SfStockChart _stockChart;
 }
