@@ -9,26 +9,39 @@
 
 <PageTitle>Live</PageTitle>
 
-<SfStockChart Title="Bot Data" @ref="_stockChart">
-    <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
-    <StockChartTooltipSettings Enable="true" Shared="true" Format="${point.x} : ${point.y}" Header="X"></StockChartTooltipSettings>
-    <StockChartSeriesCollection>
-        <StockChartSeries DataSource="@_stockChartData" Type="ChartSeriesType.Line" XName="Date" YName="LastPrice" High="HighPrice" Low="LastPrice" Open="EntryPrice" Close="ExitPrice"></StockChartSeries>
-    </StockChartSeriesCollection>
-</SfStockChart>
+<SfChart Title="Bot Data">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime" LabelFormat="HH:mm:ss" Title="Time (s)">
+        <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
+    </ChartPrimaryXAxis>
+    <ChartArea>
+        <ChartAreaBorder Width="1"></ChartAreaBorder>
+    </ChartArea>
+    <ChartPrimaryYAxis Title="LastPrice" Interval="20" LabelFormat="{value} USD">
+        <ChartAxisLineStyle Width="1" Color="transparent"></ChartAxisLineStyle>
+    </ChartPrimaryYAxis>
+    <ChartSeriesCollection>
+        <ChartSeries Type="ChartSeriesType.Line" Width="2" DataSource="@_stockChartData"
+                     XName="@nameof(BotChartData.Date)" YName="@nameof(BotChartData.LastPrice)">
+            <ChartSeriesAnimation Enable="false"></ChartSeriesAnimation>
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
 
 <p>Date refresh: @_dateTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
 
 @code {
-    private readonly ObservableCollection<BotChartData?>? _stockChartData = new();
+
+    private ObservableCollection<BotChartData> _stockChartData = new();
 
     private async Task GetAndUpdateChartData()
     {
         try
         {
+            if(_stockChartData.Count > 2000)
+                _stockChartData.RemoveAt(0);
+
             var result = await _bodDataService.GetBotChartDataAsync();
-            _stockChartData?.Add(result);
-            _stockChart?.Refresh();
+            _stockChartData.Add(result);
         }
         catch (Exception e)
         {
@@ -41,9 +54,9 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-    // create the timer
-        _timer = new Timer(1000);
+        _stockChartData = new ObservableCollection<BotChartData>();
+        // create the timer
+        _timer = new Timer(500);
         _timer.Start();
 
         _timer.Elapsed += (_, _) =>
@@ -58,7 +71,6 @@
     }
 
     DateTime _dateTime = DateTime.Now;
-    private SfStockChart? _stockChart;
 
     public void Dispose()
     {
