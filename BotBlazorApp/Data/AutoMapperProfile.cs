@@ -7,6 +7,6 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<BotChartData, BotChartDataEntity>();
+        CreateMap<BotChartData, BotChartDataEntity>().ReverseMap();
     }
 }

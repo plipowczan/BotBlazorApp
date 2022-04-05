@@ -1,0 +1,48 @@
+﻿@page "/live2"
+@inject IBotChartDataService _bodDataService;
+@inject ILogger<Live> _logger;
+@inject IUnitOfWork _unitOfWork;
+@using BotBlazorApp.Services
+@using BotBlazorApp.Data
+@inject IJSRuntime _js
+
+<PageTitle>Live2</PageTitle>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="canvasChart"></canvas> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var res = await _unitOfWork.BotChartDataRepository.GetAsync();
+
+            string[] labels = res.Select(x => x.Date.ToString("HH:mm:ss")).ToArray();
+            string[] ema = res.Select(x => x.EMA200.ToString("N2")).ToArray();
+            string[] lastPrice = res.Select(x => x.LastPrice.ToString("N2")).ToArray();
+            string[] entryPrice = res.Select(x => x.EntryPrice is null or 0 ? "NaN" : x.EntryPrice.Value.ToString("N2")).ToArray();
+            string[] highPrice = res.Select(x => x.HighPrice is null or 0 ? "NaN" : x.HighPrice.Value.ToString("N2")).ToArray();
+            string[] exitPrice = res.Select(x => x.ExitPrice is null or 0 ? "NaN" : x.ExitPrice.Value.ToString("N2")).ToArray();
+
+            string[] borderUp = res.Select(x => x.EmaInUp is null or 0 ? "NaN" : x.EmaInUp.Value.ToString("N2")).ToArray();
+            string[] borderDown = res.Select(x => x.EmaInDown is null or 0 ? "NaN" : x.EmaInDown.Value.ToString("N2")).ToArray();
+            string[] resetBorderUp = res.Select(x => x.EmaOutUp is null or 0 ? "NaN" : x.EmaOutUp.Value.ToString("N2")).ToArray();
+            string[] resetBorderDown = res.Select(x => x.EmaOutDown is null or 0 ? "NaN" : x.EmaOutDown.Value.ToString("N2")).ToArray();
+
+            await _js.InvokeVoidAsync("loadChartData", labels, ema, lastPrice, entryPrice, highPrice, exitPrice, borderUp, borderDown, resetBorderUp, resetBorderDown);
+        }
+    }
+}

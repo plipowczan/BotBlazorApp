@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BotBlazorApp.Data.Repositories;
+namespace BotBlazorApp.Data;
 
 public class GenericRepository<TEntity> where TEntity : class
 {

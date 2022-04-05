@@ -1,6 +1,6 @@
 ﻿#region usings
 
-using BotBlazorApp.Application.ChartData.AddBotChartData;
+using BotBlazorApp.Application.ChartData.GetAndAddBotChartData;
 using BotBlazorApp.Common.Commands;
 using Quartz;
 
@@ -30,7 +30,7 @@ public class AddBotChartDataJob : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogWarning("AddBotChartDataJob triggered");
-        await _commandDispatcher.ExecuteAsync(new AddBotChartDataCommand());
+        await _commandDispatcher.ExecuteAsync(new GetAndAddBotChartDataCommand());
     }
 
     #endregion

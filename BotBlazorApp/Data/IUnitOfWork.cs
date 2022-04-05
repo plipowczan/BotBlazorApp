@@ -1,6 +1,4 @@
-﻿using BotBlazorApp.Data.Repositories;
-
-namespace BotBlazorApp.Data;
+﻿namespace BotBlazorApp.Data;
 
 public interface IUnitOfWork
 {

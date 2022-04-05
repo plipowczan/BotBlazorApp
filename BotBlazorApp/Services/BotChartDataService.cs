@@ -11,13 +11,13 @@ public class BotChartDataService : IBotChartDataService
         _botChartDataUrl = configuration["BotChartData:Url"];
     }
 
-    public async Task<BotChartData> GetBotChartDataAsync()
+    public async Task<BotChartData?> GetBotChartDataAsync()
     {
         using var client = new HttpClient();
         using var httpResponseMessage = await client.GetAsync(_botChartDataUrl);
 
         var data = await httpResponseMessage.Content.ReadAsStringAsync();
-        var tempData = data.Replace("data:", "");
+        var tempData = data.Replace("data:", "").Replace("NaN", "");
         var result = JsonConvert.DeserializeObject<BotChartData>(tempData);
         return result;
     }

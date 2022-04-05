@@ -1,81 +1,70 @@
-﻿@page "/live"
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Syncfusion.Blazor.Charts
+@using BotBlazorApp.Services
+@using BotBlazorApp.Data
+@using AutoMapper
+@using System.Collections.ObjectModel
 @inject IBotChartDataService _bodDataService;
 @inject ILogger<Live> _logger;
-@using BotBlazorApp.Services
-@using System.Collections.ObjectModel
-@using System.Timers
-@using Syncfusion.Blazor.Charts
-@implements IDisposable;
+@inject NavigationManager _navigationManager;
+@inject IUnitOfWork _unitOfWork;
+@inject IMapper _mapper;
 
 <PageTitle>Live</PageTitle>
 
-<SfChart Title="Bot Data">
-    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime" LabelFormat="HH:mm:ss" Title="Time (s)">
-        <ChartAxisMajorGridLines Width="1"></ChartAxisMajorGridLines>
-    </ChartPrimaryXAxis>
-    <ChartArea>
-        <ChartAreaBorder Width="1"></ChartAreaBorder>
-    </ChartArea>
-    <ChartPrimaryYAxis Title="LastPrice" Interval="20" LabelFormat="{value} USD">
-        <ChartAxisLineStyle Width="1" Color="transparent"></ChartAxisLineStyle>
-    </ChartPrimaryYAxis>
-    <ChartSeriesCollection>
-        <ChartSeries Type="ChartSeriesType.Line" Width="2" DataSource="@_stockChartData"
-                     XName="@nameof(BotChartData.Date)" YName="@nameof(BotChartData.LastPrice)">
-            <ChartSeriesAnimation Enable="false"></ChartSeriesAnimation>
-        </ChartSeries>
-    </ChartSeriesCollection>
-</SfChart>
+<SfStockChart @ref="_liveChart" Title="Bot Data">
+    <StockChartCrosshairSettings Enable="true"></StockChartCrosshairSettings>
+    <StockChartTooltipSettings Enable="true" Shared="true" Format="${point.x} : ${point.y}" Header="X"></StockChartTooltipSettings>
+    <StockChartSeriesCollection>
+        <StockChartSeries DataSource="@StockChartData" Type="ChartSeriesType.Line" XName="@nameof(BotChartData.Date)" YName="@nameof(BotChartData.LastPrice)"></StockChartSeries>
+        <StockChartSeries DataSource="@StockChartData" Type="ChartSeriesType.Line" XName="@nameof(BotChartData.Date)" YName="@nameof(BotChartData.EMA200)"></StockChartSeries>
+        @*<StockChartSeries DataSource="@StockChartData" Type="ChartSeriesType.RangeArea" XName="@nameof(BotChartData.Date)"  High="@nameof(BotChartData.EmaInUp)" Low="@nameof(BotChartData.EmaInDown)" Opacity="0.5" Fill="blue"></StockChartSeries>*@
+    </StockChartSeriesCollection>
+    @*<StockChartIndicators>
+        <StockChartIndicator Type="TechnicalIndicators.Ema" SeriesName="LastPrice" Fill="blue" Period="14"></StockChartIndicator>
+    </StockChartIndicators>*@
+</SfStockChart>
 
 <p>Date refresh: @_dateTime.ToString("yyyy-MM-dd HH:mm:ss")</p>
 
 @code {
 
-    private ObservableCollection<BotChartData> _stockChartData = new();
+    SfStockChart? _liveChart;
+    public ObservableCollection<BotChartData> StockChartData { get; set; }
 
-    private async Task GetAndUpdateChartData()
+    protected override async void OnInitialized()
     {
-        try
-        {
-            if(_stockChartData.Count > 2000)
-                _stockChartData.RemoveAt(0);
+        var botChartDataEntitiesList = await _unitOfWork.BotChartDataRepository.GetAsync(s => s.Date > DateTime.Now.AddMinutes(-10));
+        var botChartDataList = _mapper.Map<List<BotChartData>>(botChartDataEntitiesList);
+        StockChartData = new ObservableCollection<BotChartData>(botChartDataList);
 
-            var result = await _bodDataService.GetBotChartDataAsync();
-            _stockChartData.Add(result);
-        }
-        catch (Exception e)
+        //StockChartData = new ObservableCollection<BotChartData>();
+
+        var url = _navigationManager.ToAbsoluteUri("/botchartdatahub");
+        var hubConnection = new HubConnectionBuilder().WithUrl(url).Build();
+
+        hubConnection.On<BotChartData>("ReceiveBotChartData", async(botChartData) =>
         {
-            _logger.LogError(e, "Error getting chart data");
-        }
+            await AddBotChartData(botChartData);
+        });
+
+        await hubConnection.StartAsync();
     }
 
-    private Timer _timer = null!;
-
-    protected override async Task OnInitializedAsync()
+    private async Task AddBotChartData(BotChartData botChartData)
     {
-        await base.OnInitializedAsync();
-        _stockChartData = new ObservableCollection<BotChartData>();
-        // create the timer
-        _timer = new Timer(500);
-        _timer.Start();
+        if(_liveChart == null )
+            return;
 
-        _timer.Elapsed += (_, _) =>
+        await InvokeAsync(() =>
         {
-            InvokeAsync(async () =>
-            {
-                _dateTime = DateTime.Now;
-                await GetAndUpdateChartData();
-                StateHasChanged();
-            });
-        };
+            _dateTime = DateTime.Now;
+            StockChartData.Add(botChartData);
+            _liveChart.Refresh();
+            StateHasChanged();
+        });
     }
-
+    
     DateTime _dateTime = DateTime.Now;
-
-    public void Dispose()
-    {
-        _timer.Stop();
-        _timer.Dispose();
-    }
-
 }
